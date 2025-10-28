@@ -1,0 +1,61 @@
+\hypertarget{exampleapp_8cc}{}\doxysection{projects/lab2/code/exampleapp.cc File Reference}
+\label{exampleapp_8cc}\index{projects/lab2/code/exampleapp.cc@{projects/lab2/code/exampleapp.cc}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}exampleapp.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include \char`\"{}Matrix4\+D.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Vector4\+D.\+h\char`\"{}}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespace_example}{Example}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const G\+Lchar $\ast$ \mbox{\hyperlink{exampleapp_8cc_a270dbb114bb6716cb4e45ef37922bb75}{vs}}
+\item 
+const G\+Lchar $\ast$ \mbox{\hyperlink{exampleapp_8cc_ae0e233d600a0c8d127358421462628db}{ps}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{exampleapp_8cc_ae0e233d600a0c8d127358421462628db}\label{exampleapp_8cc_ae0e233d600a0c8d127358421462628db}} 
+\index{exampleapp.cc@{exampleapp.cc}!ps@{ps}}
+\index{ps@{ps}!exampleapp.cc@{exampleapp.cc}}
+\doxysubsubsection{\texorpdfstring{ps}{ps}}
+{\footnotesize\ttfamily const G\+Lchar$\ast$ ps}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\textcolor{stringliteral}{"\#version 430\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"layout(location=0) in vec3 color;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"out vec4 Color;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"void main()\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"\{\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"   Color = vec4(color, 1.0);\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"\}\(\backslash\)n"}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{exampleapp_8cc_a270dbb114bb6716cb4e45ef37922bb75}\label{exampleapp_8cc_a270dbb114bb6716cb4e45ef37922bb75}} 
+\index{exampleapp.cc@{exampleapp.cc}!vs@{vs}}
+\index{vs@{vs}!exampleapp.cc@{exampleapp.cc}}
+\doxysubsubsection{\texorpdfstring{vs}{vs}}
+{\footnotesize\ttfamily const G\+Lchar$\ast$ vs}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\textcolor{stringliteral}{"\#version 430\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"layout(location=0) in vec3 pos;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"layout(location=1) in vec3 color;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"layout(location=0) out vec3 Color;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"layout(location=0) uniform mat4 trans;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"void main()\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"\{\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"   gl\_Position = trans * vec4(pos, 1);\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"   Color = color;\(\backslash\)n"}}
+\DoxyCodeLine{\textcolor{stringliteral}{"\}\(\backslash\)n"}}
+
+\end{DoxyCode}

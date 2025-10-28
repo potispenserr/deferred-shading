@@ -5,17 +5,10 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
 *.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
 
 # Compiled Dynamic libraries
 *.so
@@ -37,5 +30,5 @@
 *.out
 *.app
 
-# debug information files
-*.dwo
+out/
+build/

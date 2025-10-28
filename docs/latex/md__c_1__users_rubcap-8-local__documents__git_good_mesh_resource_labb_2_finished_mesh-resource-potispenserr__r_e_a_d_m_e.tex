@@ -1,0 +1,11 @@
+C++11 based application base for developing apps.\hypertarget{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md1}{}\doxysection{Requirements}\label{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md1}
+
+\begin{DoxyEnumerate}
+\item C\+Make 3+.
+\item Compiler with support for lambda functions (C++11), such as VS 2013.
+\end{DoxyEnumerate}\hypertarget{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md2}{}\doxysection{Instructions}\label{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md2}
+Put your laboration in the folder titled \textquotesingle{}projects\textquotesingle{}. It must be accompanied with its own C\+Make\+Lists.\+txt which is used to generate a project/solution. Then run C\+Make in the root of the project, there should be a target in your project matching the name of your lab.\hypertarget{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md3}{}\doxysection{Usage}\label{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md3}
+The lab environment contains two classes, Window and App. Override the App class for your project to implement your own update loop. The Window class is used to open a window and connect input handlers to it.
+
+This is done by assigning a lambda function to a callback matching the input you require. It is possible to have more than one window open at a time, although one must select which window to render to using the function called Window\+::\+Make\+Current prior to doing any GL calls.\hypertarget{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md4}{}\doxysection{Example}\label{md__c_1__users_rubcap-8-local__documents__git_good_mesh_resource_labb_2_finished_mesh-resource-potispenserr__r_e_a_d_m_e_autotoc_md4}
+The example project is simply an example implementation which displays a colored triangle on a grey background. 
