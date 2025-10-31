@@ -17,7 +17,6 @@ void main()
 
 	oTexCoord = texCoord;
 	lightNormal = mat3(transpose(inverse(model))) * normal;
-	mat3 normalMatrix = transpose(inverse(mat3(model)));
 	fragPos = worldPosition.xyz;
     oTexCoord = texCoord;
 	gl_Position = projection * view *  worldPosition;

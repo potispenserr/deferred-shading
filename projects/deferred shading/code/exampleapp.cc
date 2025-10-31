@@ -113,6 +113,8 @@ namespace Example
 		this->window->GetSize(width, height);
 
 
+
+
 		Matrix4D projection = projection.perspective(radFov, 800.0f / 600.0f, 0.1f, 100.0f);
 
 		cam.camPos = Vector4D(0.0f, 0.0f, 3.0f);
@@ -136,11 +138,10 @@ namespace Example
 		std::shared_ptr<TextureResource> normalMapPtr = std::make_shared<TextureResource>();
 
 		std::shared_ptr<ShaderObject> lightingPassShader = std::make_shared<ShaderObject>("./resources/LightingPassVS.vs", "./resources/LightingPassFS.fs");
-		std::shared_ptr<ShaderObject> screenShader = std::make_shared<ShaderObject>("./resources/QuadVS.vs", "./resources/QuadFS.fs");
 
 
 		unsigned int gBuffer;
-		glGenBuffers(1, &gBuffer);
+		glGenFramebuffers(1, &gBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 		unsigned int gPosition;
 		unsigned int gNormal;
@@ -170,11 +171,11 @@ namespace Example
 		unsigned int attachments[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 		glDrawBuffers(3, attachments);
 
-		unsigned int renderBuffer;
-		glGenRenderbuffers(1, &renderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+		unsigned int renderBufferDepth;
+		glGenRenderbuffers(1, &renderBufferDepth);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderBufferDepth);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBufferDepth);
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 			std::cout << "FRAMEBUFFER ERROR: Fool, the framebuffer is not complete!" << std::endl;
 		}
@@ -202,6 +203,12 @@ namespace Example
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
+		int depthbufferSize;
+
+
+		glGetNamedFramebufferAttachmentParameteriv(0, GL_DEPTH, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &depthbufferSize);
+
+		std::cout << "DepthBuffer Size: " << depthbufferSize << "\n";
 
 
 
@@ -215,13 +222,14 @@ namespace Example
 		lightCube.setTexture(lightTexPtr);
 		lightCube.initTexture("./resources/container2fixed.png");
 		lightCube.setTransform(Matrix4D());
+		lightCube.updateTransform(Matrix4D::scale(Vector4D(0.3, 0.3, 0.3)));
 
 
 		gn.setMesh(objectMesh);
 		gn.setShader(objectShader);
 		gn.setTexture(texPtr);
 		gn.setNormalMap(normalMapPtr);
-		gn.initTexture("");
+		gn.initTexture("./resources/container2fixed.png");
 		gn.setTransform(Matrix4D());
 
 		// gn2.setMesh(objectMesh);
@@ -245,8 +253,8 @@ namespace Example
 		light.intensity = 0.1;
 		lightingPassShader.get()->use();
 		lightingPassShader.get()->setInt("gPosition", 0);
-		lightingPassShader.get()->setInt("gNormal", 0);
-		lightingPassShader.get()->setInt("gAlbedo", 0);
+		lightingPassShader.get()->setInt("gNormal", 1);
+		lightingPassShader.get()->setInt("gAlbedo", 2);
 
 		light.setupLighting();
 
@@ -440,30 +448,45 @@ namespace Example
 			//Geometry pass
 			glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			gn.draw(cam, projection, light.lightPos);
-			//lightCube.draw(cam, projection, light.lightPos);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			Matrix4D testTrans;
+			testTrans = Matrix4D::scale(Vector4D(10.3, 10.3, 10.3));
+			objectShader.get()->use();
+			objectShader.get()->setMat4(std::string("model"), testTrans);
+			objectShader.get()->setMat4(std::string("view"), cam.getView());
+			objectShader.get()->setMat4(std::string("projection"), projection);	
 
+			gn.draw(cam, projection, light.lightPos);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			
 			//Lighting pass
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			lightingPassShader.get()->use();
 			glActiveTexture(GL_TEXTURE0);
-			Vector4D lightPosition = Vector4D(14.2f, 1.0f, 2.0f);
-			lightingPassShader.get()->setVec3("lights[0].position", lightPosition);
+			glBindTexture(GL_TEXTURE_2D, gPosition);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, gNormal);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, gAlbedo);
+			lightingPassShader.get()->setVec3("lights[0].position", light.lightPos);
 			lightingPassShader.get()->setVec3("lights[0].color", Vector4D(1.0f, 1.0f, 1.0f));
 			lightingPassShader.get()->setVec3("viewPosition", cam.camPos);
-
+			
+			
+			//Drawing the screenfilling quad
 			glBindVertexArray(quadVertexArray);
-			glBindTexture(GL_TEXTURE_2D, gNormal);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
+			glBindVertexArray(0);
+			
+			
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
+			
 			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
+			
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			
+			
+			//lightCube.draw(cam, projection, light.lightPos);
 			//gn2.draw(cam, projection, light.lightPos);
 			// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// glActiveTexture(GL_TEXTURE0);
