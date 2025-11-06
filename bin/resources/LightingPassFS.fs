@@ -12,7 +12,7 @@ struct Light {
     vec3 color;
 };
 
-const int numLights = 32;
+const int numLights = 20;
 uniform Light lights[numLights];
 uniform vec3 viewPosition;
 

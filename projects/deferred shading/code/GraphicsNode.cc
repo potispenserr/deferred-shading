@@ -120,20 +120,19 @@ void GraphicsNode::initTexture(std::string path) {
 
 void GraphicsNode::draw(Camera cam, Matrix4D projection, Vector4D lightPosition)
 {	
-	// shader.get()->use();
-	// shader.get()->setMat4(std::string("model"), transform);
-	// shader.get()->setMat4(std::string("view"), cam.getView());
-	// shader.get()->setMat4(std::string("projection"), projection);
-	// shader.get()->setVec3(std::string("lightPosition"), lightPosition);
-	// shader.get()->setVec3(std::string("viewPosition"), cam.camPos);
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture.get()->texID);
 	
 	if(mesh.get()->isGLTF == true){
-		if(normalMap.get()->texPictureData != NULL){
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, normalMap.get()->texID);
+
+		if(normalMap.get() != 0x0){
+			if(normalMap.get()->texPictureData != NULL){
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, normalMap.get()->texID);
+			}
 		}
+
 		for(auto nodeIt = mesh.get()->glTFModel.nodes.begin();  nodeIt != mesh.get()->glTFModel.nodes.end(); ++nodeIt){
 			auto node = *nodeIt;
 			

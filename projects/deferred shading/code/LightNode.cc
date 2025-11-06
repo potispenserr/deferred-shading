@@ -12,30 +12,27 @@ LightNode::~LightNode()
 }
 
 
-void LightNode::setupLighting()
+void LightNode::setupLighting(Vector4D lightPosition)
 {	
 
-	// lightShader.get()->use();
-	// lightShader.get()->setVec3(std::string("lightColor"), lightColor);
-	// lightShader.get()->setFloat(std::string("ambientIntensity"), 0.1f);
-
-	// lightShader.get()->setInt(std::string("material.textureDiffuse"), 0);
-	// lightShader.get()->setVec3(std::string("material.textureSpecular"), Vector4D(0.5f, 0.5f, 0.5f));
-	// lightShader.get()->setFloat(std::string("material.shininess"), 64.0f);
-
-	// lightShader.get()->setVec3(std::string("light.ambient"), Vector4D(0.2f, 0.2f, 0.2f));
-	// lightShader.get()->setVec3(std::string("light.diffuse"), Vector4D(0.5f, 0.5f, 0.5f));
-	// lightShader.get()->setVec3(std::string("light.specular"), Vector4D(1.0f, 1.0f, 1.0f));
+	lightShader.get()->use();
+	lightPos = lightPosition;
+	intensity = 0.1;
+	lightShader.get()->use();
+	lightShader.get()->setInt("gPosition", 0);
+	lightShader.get()->setInt("gNormal", 1);
+	lightShader.get()->setInt("gAlbedo", 2);
 
 	
 
 
 }
 
-void LightNode::updateLighting(Camera cam, Matrix4D projection, GraphicsNode& lightCube)
+void LightNode::updateLighting(Camera cam, Matrix4D projection, GraphicsNode& lightCube, Vector4D& color)
 {
 	lightCube.setTransform(Matrix4D::translation(lightPos));
 	lightCube.updateTransform(Matrix4D::scale(Vector4D(0.2f, 0.2f, 0.2f)));
+	
 
 	
 }

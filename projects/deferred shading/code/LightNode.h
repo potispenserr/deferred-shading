@@ -15,9 +15,9 @@ public:
 	unsigned int lightVAO = -1;
 
 
-	void setupLighting();
+	void setupLighting(Vector4D lightPosition);
 
-	void updateLighting(Camera cam, Matrix4D projection, GraphicsNode& lightCube);
+	void updateLighting(Camera cam, Matrix4D projection, GraphicsNode& lightCube, Vector4D& color);
 
 
 
