@@ -132,9 +132,12 @@ namespace Example
 		std::shared_ptr<ShaderObject> pointLightShader = std::make_shared<ShaderObject>("./resources/LightCubeVS.vs", "./resources/LightCubeFS.fs");
 
 
-		std::shared_ptr<MeshResource> objectMesh = std::make_shared<MeshResource>();
+
+		std::shared_ptr<MeshResource> cubeMesh = std::make_shared<MeshResource>();
+		std::shared_ptr<MeshResource> avocaMesh = std::make_shared<MeshResource>();
 		std::shared_ptr<ShaderObject> objectShader = std::make_shared<ShaderObject>("./resources/DeferredShadingVS.vs", "./resources/DeferredShadingFS.fs");
 		std::shared_ptr<TextureResource> texPtr = std::make_shared<TextureResource>();
+		std::shared_ptr<TextureResource> tex2Ptr = std::make_shared<TextureResource>();
 		std::shared_ptr<TextureResource> normalMapPtr = std::make_shared<TextureResource>();
 
 		std::shared_ptr<ShaderObject> lightingPassShader = std::make_shared<ShaderObject>("./resources/LightingPassVS.vs", "./resources/LightingPassFS.fs");
@@ -201,7 +204,8 @@ namespace Example
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
 		pointLightMesh->loadObj("./resources/cube2.obj");
-		objectMesh->loadGLTF("./resources/Avocado.gltf");
+		cubeMesh->loadGLTF("./resources/cube.gltf");
+		avocaMesh->loadGLTF("./resources/Avocado.gltf");
 
 		lightCube.setMesh(pointLightMesh);
 		lightCube.setShader(pointLightShader);
@@ -211,22 +215,23 @@ namespace Example
 		lightCube.updateTransform(Matrix4D::scale(Vector4D(10.3, 10.3, 10.3)));
 
 
-		gn.setMesh(objectMesh);
+		gn.setMesh(cubeMesh);
 		gn.setShader(objectShader);
 		gn.setTexture(texPtr);
 		gn.setNormalMap(normalMapPtr);
-		gn.initTexture("./resources/diffuse.jpg");
+		gn.initTexture("");
 		gn.setTransform(Matrix4D());
 
-		// gn2.setMesh(objectMesh);
-		// gn2.setShader(lightShader);
-		// gn2.setTexture(texPtr);s
-		// gn2.setTransform(Matrix4D());
+		gn2.setMesh(avocaMesh);
+		gn2.setShader(objectShader);
+		gn2.setTexture(tex2Ptr);
+		gn2.initTexture("");
+		gn2.setTransform(Matrix4D());
 
 		//gn.updateTransform(Matrix4D::scale(Vector4D(0.05, 0.05, 0.05)));
 
-		gn.updateTransform(Matrix4D::scale(Vector4D(10.3, 10.3, 10.3)));
-		gn.updateTransform(Matrix4D::roty(160));
+		// gn.updateTransform(Matrix4D::scale(Vector4D(10.3, 10.3, 10.3)));
+		// gn.updateTransform(Matrix4D::roty(160));
 		// gn2.updateTransform(Matrix4D::scale(Vector4D(0.3, 0.3, 0.3)));
 		// gn2.updateTransform(Matrix4D::translation(Vector4D(2.0f, 2.0f, 2.0f)));
 
@@ -244,47 +249,25 @@ namespace Example
 		srand(time(0));
 
 		for (size_t i = 0; i < numLights; i++){
-			// float x = ((rand() % 100) / 250.0) * 6.0 - 2.0;
-			// float y = ((rand() % 100) / 250.0) * 6.0 - 3.0;
-			// float z = ((rand() % 100) / 250.0) * 6.0 - 3.0;
-			//objectPositions.push_back(Vector4D(x, y, z));
+			float x = ((rand() % 100) / 200.0) * 6.0 - 2.0;
+			float y = ((rand() % 100) / 200.0) * 6.0 - 3.0;
+			float z = ((rand() % 100) / 200.0) * 6.0 - 3.0;
+			objectPositions.push_back(Vector4D(x, y, z));
+			std::cout << "Pos X:" << x << " Y:" << y << " Z: " << z << "\n";
 			
 			// these output a value between 0-1
 			float r = ((rand() % 255) / 255.0f);
 			float g = ((rand() % 255) / 255.0f);
 			float b = ((rand() % 255) / 255.0f);
-			std::cout << "Color R:" << r << " G:" << g << " B: " << b << "\n";
 			lightColors.push_back(Vector4D(r, g, b));
 			
-			// x = ((rand() % 100) / 10.0) * -6.0 - 2.0;
-			// y = ((rand() % 100) / 10.0) * -6.0 - 3.0;
-			// z = ((rand() % 100) / 10.0) * -6.0 - 7.0;
-			float x = static_cast<float>(((rand() % 100) / 10.0) * 5.0 - 3.0);
-			float y = static_cast<float>(((rand() % 100) / 10.0) * 5.0 - 4.0);
-			float z = static_cast<float>(((rand() % 100) / 10.0) * 5.0 - 3.0);
-			//lightPositions.push_back(Vector4D(x, y, z));
+			x = ((rand() % 100) / 200.0) * 6.0 - 2.0;
+			y = ((rand() % 100) / 200.0) * 6.0 - 3.0;
+			z = ((rand() % 100) / 200.0) * 6.0 - 3.0;
+			lightPositions.push_back(Vector4D(x, y, z));
+			
 			
 		}
-
-		objectPositions.push_back(Vector4D(-3.0, -0.5, -3.0));
-		objectPositions.push_back(Vector4D( 0.0, -0.5, -3.0));
-		objectPositions.push_back(Vector4D( 3.0, -0.5, -3.0));
-		objectPositions.push_back(Vector4D(-3.0, -0.5,  0.0));
-		objectPositions.push_back(Vector4D( 0.0, -0.5,  0.0));
-		objectPositions.push_back(Vector4D( 3.0, -0.5,  0.0));
-		objectPositions.push_back(Vector4D(-3.0, -0.5,  3.0));
-		objectPositions.push_back(Vector4D( 0.0, -0.5,  3.0));
-		objectPositions.push_back(Vector4D( 3.0, -0.5,  3.0));
-
-		lightPositions.push_back(Vector4D(-4.0, -0.5, -3.0));
-		lightPositions.push_back(Vector4D( 0.0, -0.5, -4.0));
-		lightPositions.push_back(Vector4D( 3.0, -0.5, -4.0));
-		lightPositions.push_back(Vector4D(-4.0, -0.5,  0.0));
-		lightPositions.push_back(Vector4D( 0.0, -1.5,  0.0));
-		lightPositions.push_back(Vector4D( 4.0, -0.5,  0.0));
-		lightPositions.push_back(Vector4D(-4.0, -0.5,  3.0));
-		lightPositions.push_back(Vector4D( 0.0, -0.5,  2.0));
-		lightPositions.push_back(Vector4D( 3.0, -0.5,  2.0));
 
 
 
@@ -312,6 +295,8 @@ namespace Example
 			currentFrame = glfwGetTime();
 			deltaTime = currentFrame - lastFrame;	
 			lastFrame = currentFrame;
+
+			
 
 			/*light.intensity = (float)cos(glfwGetTime());
 			std::cout << light.intensity << "\n";*/
@@ -480,13 +465,24 @@ namespace Example
 			objectShader.get()->use();
 			objectShader.get()->setMat4(std::string("view"), cam.getView());
 			objectShader.get()->setMat4(std::string("projection"), projection);	
-			for(size_t i = 0; i < objectPositions.size(); i++){
+			for(size_t i = 0; i < objectPositions.size() / 2; i++){
 				Matrix4D model = Matrix4D::translation(objectPositions[i]);
-				Matrix4D scale = Matrix4D::scale(Vector4D(10.5f, 10.5f, 10.5f));
+				Matrix4D scale = Matrix4D::scale(Vector4D(0.1f, 0.1f, 0.1f));
 				//scale before translation otherwise the lighting will be messed up
 				model = scale * model;
 				objectShader.get()->setMat4(std::string("model"), model);
 				gn.draw(cam, projection, light.lightPos);
+
+
+			}
+			
+			for(size_t i = 9; i < objectPositions.size(); i++){
+				Matrix4D model = Matrix4D::translation(objectPositions[i]);
+				Matrix4D scale = Matrix4D::scale(Vector4D(10.1f, 10.1f, 10.1f));
+				//scale before translation otherwise the lighting will be messed up
+				model = scale * model;
+				objectShader.get()->setMat4(std::string("model"), model);
+				gn2.draw(cam, projection, light.lightPos);
 
 			}
 
@@ -502,6 +498,9 @@ namespace Example
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, gAlbedo);
 			for(size_t i = 0; i < lightColors.size(); i++){
+				lightPositions[i].x() = lightPositions[i].x() + sin(glfwGetTime()) / 2;
+				lightPositions[i].y() = lightPositions[i].y() + sin(glfwGetTime()) / 2;
+				lightPositions[i].z() = lightPositions[i].z() + sin(glfwGetTime()) / 2;
 				lightingPassShader.get()->setVec3("lights[" + std::to_string(i) + "].position", lightPositions[i]);
 				lightingPassShader.get()->setVec3("lights[" + std::to_string(i) + "].color", lightColors[i]);
 
@@ -538,6 +537,7 @@ namespace Example
 			pointLightShader.get()->setMat4(std::string("view"), cam.getView());
 			pointLightShader.get()->setMat4(std::string("projection"), projection);
 			for(size_t i = 0; i < lightPositions.size(); i++){
+				
 				Matrix4D model = Matrix4D::translation(lightPositions[i]);
 				Matrix4D scale = Matrix4D::scale(Vector4D(0.05f, 0.05f, 0.05f));
 				// scale before transform

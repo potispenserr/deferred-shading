@@ -104,8 +104,8 @@ void GraphicsNode::initTexture(std::string path) {
 				}
 			if(model.meshes[0].primitives[0].attributes.find("TANGENT") != model.meshes[0].primitives[0].attributes.end()) {
 					const std::string normalMapImage = model.images[2].uri;
-					normalMap.get()->loadTex("./resources/" + normalMapImage, false);
-					std::cout << "loading normal map as well" << "\n";
+					//normalMap.get()->loadTex("./resources/" + normalMapImage, false);
+					//std::cout << "loading normal map as well" << "\n";
 
 			}
 			return;
