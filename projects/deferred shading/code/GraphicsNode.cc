@@ -118,7 +118,7 @@ void GraphicsNode::initTexture(std::string path) {
 }
 
 
-void GraphicsNode::draw(Camera cam, Matrix4D projection, Vector4D lightPosition)
+void GraphicsNode::draw(Camera& cam, Matrix4D& projection, Vector4D& lightPosition)
 {	
 	
 	glActiveTexture(GL_TEXTURE0);

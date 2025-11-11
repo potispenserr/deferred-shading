@@ -38,7 +38,7 @@ public:
 	void initTexture(std::string path);
 
 
-	void draw(Camera cam, Matrix4D projection, Vector4D lightPosition);
+	void draw(Camera& cam, Matrix4D& projection, Vector4D& lightPosition);
 
 
 	void clearMemory();

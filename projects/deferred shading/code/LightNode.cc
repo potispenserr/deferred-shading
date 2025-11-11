@@ -16,9 +16,6 @@ void LightNode::setupLighting(Vector4D lightPosition)
 {	
 
 	lightShader.get()->use();
-	lightPos = lightPosition;
-	intensity = 0.1;
-	lightShader.get()->use();
 	lightShader.get()->setInt("gPosition", 0);
 	lightShader.get()->setInt("gNormal", 1);
 	lightShader.get()->setInt("gAlbedo", 2);
