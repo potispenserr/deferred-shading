@@ -88,7 +88,7 @@ namespace Example
 		if (this->window->Open())
 		{
 			// set clear color to gray
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			
 		}
 		return true;
@@ -101,6 +101,8 @@ namespace Example
 		ExampleApp::Run()
 	{
 		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+
 		//glDepthFunc(GL_LESS);
 		//Uncomment the line below if you're not in a VM and then you will have an easier time moving the camera
 		//window->SetInputMode(GLFW_CURSOR_DISABLED);
@@ -203,7 +205,7 @@ namespace Example
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
-		pointLightMesh->loadObj("./resources/cube2.obj");
+		pointLightMesh->loadGLTF("./resources/CarbonFibre.gltf");
 		cubeMesh->loadGLTF("./resources/cube.gltf");
 		avocaMesh->loadGLTF("./resources/Avocado.gltf");
 
@@ -212,7 +214,6 @@ namespace Example
 		lightCube.setTexture(lightTexPtr);
 		//lightCube.initTexture("");
 		lightCube.setTransform(Matrix4D());
-		lightCube.updateTransform(Matrix4D::scale(Vector4D(10.3, 10.3, 10.3)));
 
 
 		gn.setMesh(cubeMesh);
@@ -487,6 +488,8 @@ namespace Example
 			}
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+			
 			
 			//Lighting pass
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -497,10 +500,16 @@ namespace Example
 			glBindTexture(GL_TEXTURE_2D, gNormal);
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, gAlbedo);
+
+			lightingPassShader.get()->setVec3("directionLight.direction", Vector4D(-0.2f, -2.0f, -0.3f));
+			lightingPassShader.get()->setVec3("directionLight.ambient", Vector4D(0.03f, 0.03f, 0.03f));
+			lightingPassShader.get()->setVec3("directionLight.diffuse", Vector4D(0.04f, 0.04f, 0.04f));
+			lightingPassShader.get()->setVec3("directionLight.specular", Vector4D(0.05f, 0.05f, 0.05f));
+
 			for(size_t i = 0; i < lightColors.size(); i++){
-				lightPositions[i].x() = lightPositions[i].x() + sin(glfwGetTime()) / 2;
-				lightPositions[i].y() = lightPositions[i].y() + sin(glfwGetTime()) / 2;
-				lightPositions[i].z() = lightPositions[i].z() + sin(glfwGetTime()) / 2;
+				lightPositions[i].x() = lightPositions[i].x() + sin(glfwGetTime()) / 12;
+				lightPositions[i].y() = lightPositions[i].y() + sin(glfwGetTime()) / 12;
+				lightPositions[i].z() = lightPositions[i].z() + sin(glfwGetTime()) / 12;
 				lightingPassShader.get()->setVec3("lights[" + std::to_string(i) + "].position", lightPositions[i]);
 				lightingPassShader.get()->setVec3("lights[" + std::to_string(i) + "].color", lightColors[i]);
 
@@ -539,7 +548,7 @@ namespace Example
 			for(size_t i = 0; i < lightPositions.size(); i++){
 				
 				Matrix4D model = Matrix4D::translation(lightPositions[i]);
-				Matrix4D scale = Matrix4D::scale(Vector4D(0.05f, 0.05f, 0.05f));
+				Matrix4D scale = Matrix4D::scale(Vector4D(0.1f, 0.1f, 0.1f));
 				// scale before transform
 				model = scale * model;
 				pointLightShader.get()->setVec3("lightColor", lightColors[i]);
